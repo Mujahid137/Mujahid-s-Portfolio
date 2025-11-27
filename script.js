@@ -609,7 +609,6 @@ if (contactForm) {
       const res = await fetch(
         "https://portfolio-backend-kb57.onrender.com/api/contact",
         {
-          // when deployed, change this URL to your live backend URL
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -618,18 +617,33 @@ if (contactForm) {
         }
       );
 
-      const data = await res.json();
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        console.error("JSON parse error:", jsonErr);
+        alert("Server did not return valid JSON.");
+        btn.textContent = "Server Error";
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }, 2500);
+        return;
+      }
 
-      if (data.success) {
+      console.log("Backend response:", data);
+
+      // 🔥 For now: treat any 2xx as success (demo mode)
+      if (res.ok) {
         btn.textContent = "✓ Message Sent!";
         contactForm.reset();
       } else {
-        console.error(data.error);
+        console.error("Backend error:", data);
         btn.textContent = "Error, Try Again";
       }
     } catch (err) {
       console.error("Network error:", err);
-      btn.textContent = "Error, Try Again";
+      btn.textContent = "Network Error";
     }
 
     setTimeout(() => {
@@ -638,6 +652,7 @@ if (contactForm) {
     }, 2500);
   });
 }
+
 
 // ========================
 // SMOOTH SCROLL
