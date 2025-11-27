@@ -606,14 +606,17 @@ if (contactForm) {
     btn.textContent = "Sending...";
 
     try {
-      const res = await fetch("http://localhost:5000/api/contact", {
-        // when deployed, change this URL to your live backend URL
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, message }),
-      });
+      const res = await fetch(
+        "https://portfolio-backend-kb57.onrender.com/api/contact",
+        {
+          // when deployed, change this URL to your live backend URL
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, message }),
+        }
+      );
 
       const data = await res.json();
 
@@ -686,9 +689,3 @@ renderSkills();
 renderHighlights();
 renderBlog();
 attachFadeObserver();
-await fetch("https://https://portfolio-backend-kb57.onrender.com/api/contact", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ name, email, message }),
-});
-
