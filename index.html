@@ -1,0 +1,353 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mujahid - Creative Developer</title>
+    <meta
+      name="description"
+      content="Futuristic portfolio showcasing innovative web projects by Mujahid."
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="#home" class="nav-logo">Mujahid's Portfolio</a>
+        <button class="nav-toggle" id="navToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#education" class="nav-link">Education</a></li>
+          <li><a href="#blog" class="nav-link">Blog</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle">
+          <span class="sun-icon">☀️</span>
+          <span class="moon-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-background">
+        <canvas id="particleCanvas"></canvas>
+        <div class="hero-gradient"></div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-layout">
+          <!-- LEFT: TEXT PART -->
+          <div class="hero-text">
+            <p class="hero-kicker">Creative Developer · Tech Explorer</p>
+            <h1 class="hero-title">
+              Building <span class="gradient-text">Futuristic</span> Experiences
+            </h1>
+            <p class="hero-subtitle">
+              I design and develop immersive, high-performance web experiences
+              with a blend of clean engineering and bold visuals.
+            </p>
+            <div class="dp-wrapper">
+              <div class="dp-inner"></div>
+            </div>
+
+            <div class="hero-meta-row">
+              <div class="hero-pill">🚀 Frontend & UI Engineer</div>
+              <div class="hero-pill">⚡ React · TypeScript · Next.js</div>
+            </div>
+
+            <div class="hero-buttons">
+              <button
+                class="btn btn-primary"
+                onclick="scrollToSection('#projects')"
+              >
+                View Projects
+              </button>
+              <button
+                class="btn btn-outline"
+                onclick="scrollToSection('#contact')"
+              >
+                Get in Touch
+              </button>
+            </div>
+
+            <div class="scroll-indicator">
+              <span>Scroll to explore</span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path d="M12 5v14M5 12l7 7 7-7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- RIGHT: FUTURISTIC DP / PROFILE CARD -->
+          <div class="hero-dp-shell">
+            <div class="hero-dp-orbit hero-dp-orbit--outer"></div>
+            <div class="hero-dp-orbit hero-dp-orbit--inner"></div>
+
+            <div class="hero-dp-card">
+              <div class="hero-dp-scan"></div>
+
+              <!-- change this src to your DP path -->
+              <div class="hero-dp-frame">
+                <img
+                  src="assets/mujahid-dp.png.jpg"
+                  alt="Abudllah Al Mujahid"
+                  class="hero-dp"
+                />
+
+                <span class="hero-dp-status">ONLINE</span>
+              </div>
+
+              <div class="hero-dp-info">
+                <h3>Abdullah Al Mujahid</h3>
+                <p>Creative Developer · UI Engineer</p>
+              </div>
+
+              <div class="hero-dp-tags">
+                <span class="hero-dp-chip">UI/UX</span>
+                <span class="hero-dp-chip">Frontend</span>
+                <span class="hero-dp-chip">3D & Animations</span>
+              </div>
+
+              <div class="hero-dp-stats">
+                <div class="hero-dp-stat">
+                  <span class="hero-dp-stat-number">10+</span>
+                  <span class="hero-dp-stat-label">Projects</span>
+                </div>
+                <div class="hero-dp-stat">
+                  <span class="hero-dp-stat-number">3+</span>
+                  <span class="hero-dp-stat-label">Tech Stacks</span>
+                </div>
+                <div class="hero-dp-stat">
+                  <span class="hero-dp-stat-number">∞</span>
+                  <span class="hero-dp-stat-label">Ideas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured <span class="gradient-text">Projects</span></h2>
+          <p>A selection of my recent work, showcasing innovative solutions</p>
+        </div>
+
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="React">React</button>
+          <button class="filter-btn" data-filter="TypeScript">
+            TypeScript
+          </button>
+          <button class="filter-btn" data-filter="Python">Python</button>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+          <!-- Projects populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="section-header">
+          <h2>About <span class="gradient-text">Me</span></h2>
+          <p>
+            A passionate developer with a love for creating immersive digital
+            experiences
+          </p>
+        </div>
+
+        <div class="about-content">
+          <div class="skills-container">
+            <h3>Skills & Expertise</h3>
+            <div class="skills-list" id="skillsList">
+              <!-- Skills populated by script.js -->
+            </div>
+          </div>
+
+          <div class="highlights-container">
+            <h3>Why Work With Me?</h3>
+            <div class="highlights-grid" id="highlightsGrid">
+              <!-- Highlights populated by script.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="education">
+      <div class="container">
+        <div class="section-header">
+          <h2>My <span class="gradient-text">Education</span></h2>
+          <p>A quick look at my academic journey</p>
+        </div>
+
+        <div class="education-timeline">
+          <div class="edu-card">
+            <h3>United International University (UIU)</h3>
+            <p class="edu-degree">BSc in Computer Science & Engineering</p>
+            <p class="edu-meta">2024 – Present · Dhaka, Bangladesh</p>
+            <p class="edu-extra">
+              Coursework: Object-Oriented Programming, Data Structures &
+              Algorithms, Web Development, Database Systems, Operating Systems,
+              Computer Networks.
+            </p>
+          </div>
+
+          <div class="edu-card">
+            <h3>Notre Dame College,Dhaka</h3>
+            <p class="edu-degree">
+              Higher Secondary Certificate (HSC) · Science
+            </p>
+            <p class="edu-meta">2020-2022</p>
+            <p class="edu-extra">
+              Focus on Mathematics, Physics, Chemistry, and ICT with strong
+              interest in problem solving and logical reasoning.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog">
+      <div class="container">
+        <div class="section-header">
+          <h2>Latest <span class="gradient-text">Blog Posts</span></h2>
+          <p>Insights and thoughts on web development and design</p>
+        </div>
+
+        <div class="blog-grid" id="blogGrid">
+          <!-- Blog posts populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2>Let's <span class="gradient-text">Connect</span></h2>
+          <p>Have a project in mind? Let's create something amazing together</p>
+        </div>
+
+        <div class="contact-content">
+          <div class="contact-info">
+            <div class="info-card">
+              <h4>Email</h4>
+              <p>mdjx137@gmail.com</p>
+            </div>
+            <div class="info-card">
+              <h4>Location</h4>
+              <p>Dhaka, Bangladesh</p>
+            </div>
+            <div class="info-card">
+              <h4>Timezone</h4>
+              <p>UTC (+6)</p>
+            </div>
+          </div>
+
+          <form class="contact-form" id="contactForm">
+            <div class="form-group">
+              <input
+                type="text"
+                placeholder="Your Name"
+                required
+                id="formName"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="email"
+                placeholder="Your Email"
+                required
+                id="formEmail"
+              />
+            </div>
+            <div class="form-group">
+              <textarea
+                placeholder="Your Message"
+                rows="5"
+                required
+                id="formMessage"
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div>
+            <h3>Mujahid</h3>
+            <p>Creative Developer & Designer</p>
+          </div>
+          <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#projects">Projects</a>
+            <a href="#about">About</a>
+            <a href="#education">Education</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="social-links">
+            <a href="https://github.com/Mujahid137" target="_blank"
+              ><i class="fab fa-github"></i
+            ></a>
+            <a
+              href="https://www.linkedin.com/in/abdullah-al-mujahid-b750a1297/"
+              target="_blank"
+              ><i class="fab fa-linkedin"></i
+            ></a>
+            <a href="https://twitter.com/hackermj32" target="_blank"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a href="https://facebook.com/Ab.Muja.Hid.2" target="_blank"
+              ><i class="fab fa-facebook"></i
+            ></a>
+            <a href="https://instagram.com/mujaheed.0001" target="_blank"
+              ><i class="fab fa-instagram"></i
+            ></a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Abdullah Al Mujahid. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
