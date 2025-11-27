@@ -686,3 +686,9 @@ renderSkills();
 renderHighlights();
 renderBlog();
 attachFadeObserver();
+await fetch("https://https://portfolio-backend-kb57.onrender.com/api/contact", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ name, email, message }),
+});
+
