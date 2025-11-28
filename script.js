@@ -3,7 +3,16 @@
 // ========================
 // Change this to your deployed backend URL (Railway / Render):
 // Example: const BACKEND_URL = "https://portfolio-backend-yourname.up.railway.app";
-const BACKEND_URL = "https://portfolio-backend-r1qgdkkjn-mujahid137s-projects.vercel.app/";
+// ❌ NO trailing slash here
+const BACKEND_URL = "https://portfolio-backend-r1qgdkkjn-mujahid137s-projects.vercel.app";
+
+// ✅ Now this becomes: https://...vercel.app/api/contact
+fetch(`${BACKEND_URL}/api/contact`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ name, email, message }),
+});
+
 
 
 // ========================
