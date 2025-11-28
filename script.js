@@ -1,707 +1,493 @@
-// ========================
-// BACKEND CONFIG
-// ========================
-// Change this to your deployed backend URL (Railway / Render / Vercel):
+// ==========================
+// CONFIG: BACKEND URL
+// ==========================
+// Change this to your deployed backend URL (Railway/Render):
 // Example: const BACKEND_URL = "https://portfolio-backend-yourname.up.railway.app";
-// ❌ NO trailing slash here
-const BACKEND_URL =
-  "https://portfolio-backend-vercel-c178djp00-mujahid137s-projects.vercel.app";
+const BACKEND_URL = "https://your-backend-url-here.com";
 
-
-// ========================
-// THEME MANAGEMENT
-// ========================
-const themeToggle = document.getElementById("themeToggle");
-const html = document.documentElement;
-
-function initTheme() {
-  const savedTheme = localStorage.getItem("portfolio-theme") || "dark";
-  html.setAttribute("data-theme", savedTheme);
-}
-
-if (themeToggle) {
-  themeToggle.addEventListener("click", () => {
-    const currentTheme = html.getAttribute("data-theme");
-    const newTheme = currentTheme === "dark" ? "light" : "dark";
-    html.setAttribute("data-theme", newTheme);
-    localStorage.setItem("portfolio-theme", newTheme);
-  });
-}
-
-// ========================
-// NAVIGATION
-// ========================
-const navToggle = document.getElementById("navToggle");
-const navMenu = document.getElementById("navMenu");
-const navLinks = document.querySelectorAll(".nav-link");
-const navbar = document.querySelector(".navbar");
-
-if (navToggle && navMenu) {
-  navToggle.addEventListener("click", () => {
-    navMenu.classList.toggle("active");
-  });
-}
-
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    if (navMenu) navMenu.classList.remove("active");
-  });
-});
-
-window.addEventListener("scroll", () => {
-  if (navbar) {
-    if (window.scrollY > 50) {
-      navbar.classList.add("scrolled");
-    } else {
-      navbar.classList.remove("scrolled");
-    }
-  }
-});
-
-// ========================
-// SCROLL PROGRESS BAR
-// ========================
-const scrollProgress = document.getElementById("scrollProgress");
-
-window.addEventListener("scroll", () => {
-  if (!scrollProgress) return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const scrollPercent = (scrollTop / docHeight) * 100;
-  scrollProgress.style.width = scrollPercent + "%";
-});
-
-// ========================
-// PARTICLE + HOLOGRAM BACKGROUND
-// ========================
-const canvas = document.getElementById("particleCanvas");
-let ctx = null;
-
-if (canvas) {
-  ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-const particles = [];
-const particleCount = 90;
-let hologramOffset = 0;
-
-// Center hologram aura (no mouse)
-const hologramAura = document.createElement("div");
-hologramAura.style.position = "fixed";
-hologramAura.style.width = "50vw";
-hologramAura.style.height = "50vw";
-hologramAura.style.borderRadius = "50%";
-hologramAura.style.left = "50%";
-hologramAura.style.top = "50%";
-hologramAura.style.transform = "translate(-50%, -50%)";
-hologramAura.style.pointerEvents = "none";
-hologramAura.style.zIndex = "1";
-hologramAura.style.mixBlendMode = "screen";
-hologramAura.style.opacity = "0.25";
-hologramAura.style.background =
-  "radial-gradient(circle at 50% 40%, rgba(0,255,255,0.8), rgba(0,0,0,0))";
-document.body.appendChild(hologramAura);
-
-let auraAngle = 0;
-
-class Particle {
-  constructor() {
-    this.reset();
-  }
-
-  reset() {
-    if (!canvas) return;
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2.2 + 0.6;
-    this.speedX = (Math.random() - 0.5) * 0.6;
-    this.speedY = (Math.random() - 0.5) * 0.6;
-    this.baseAlpha = Math.random() * 0.4 + 0.2;
-    this.alpha = this.baseAlpha;
-    this.phase = Math.random() * Math.PI * 2;
-  }
-
-  update() {
-    if (!canvas) return;
-    // Basic drift
-    this.x += this.speedX;
-    this.y += this.speedY;
-
-    // Gentle wave movement
-    this.y += Math.sin(this.phase + performance.now() / 1000) * 0.08;
-
-    // Wrap around edges
-    if (this.x > canvas.width) this.x = 0;
-    if (this.x < 0) this.x = canvas.width;
-    if (this.y > canvas.height) this.y = 0;
-    if (this.y < 0) this.y = canvas.height;
-
-    // Flickering opacity
-    this.alpha += (Math.random() - 0.5) * 0.02;
-    this.alpha = Math.max(0.1, Math.min(0.9, this.alpha));
-  }
-
-  draw() {
-    if (!ctx) return;
-    const theme = html.getAttribute("data-theme") || "dark";
-    const baseColor =
-      theme === "dark"
-        ? `rgba(0, 255, 255, ${this.alpha})`
-        : `rgba(0, 180, 255, ${this.alpha * 0.8})`;
-
-    const gradient = ctx.createRadialGradient(
-      this.x,
-      this.y,
-      0,
-      this.x,
-      this.y,
-      this.size * 4
-    );
-    gradient.addColorStop(0, baseColor);
-    gradient.addColorStop(0.7, "rgba(0, 255, 255, 0)");
-    gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
-    ctx.fill();
+// ==========================
+// HELPERS
+// ==========================
+function scrollToSection(selector) {
+  const el = document.querySelector(selector);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth" });
   }
 }
 
+// ==========================
+// PARTICLE BACKGROUND
+// ==========================
 function initParticles() {
+  const canvas = document.getElementById("particleCanvas");
   if (!canvas) return;
-  particles.length = 0;
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
+
+  const ctx = canvas.getContext("2d");
+  let width, height, particles;
+
+  function resize() {
+    width = canvas.width = canvas.offsetWidth;
+    height = canvas.height = canvas.offsetHeight;
+    createParticles();
   }
-}
 
-function drawHologramLines() {
-  if (!ctx || !canvas) return;
-  const theme = html.getAttribute("data-theme") || "dark";
-  const lineColor =
-    theme === "dark" ? "rgba(0, 255, 255, 0.06)" : "rgba(0, 150, 255, 0.05)";
-
-  const spacing = 45;
-  hologramOffset += 0.7;
-  if (hologramOffset > spacing) hologramOffset = 0;
-
-  ctx.save();
-  ctx.beginPath();
-  for (let y = -spacing; y < canvas.height + spacing; y += spacing) {
-    ctx.moveTo(0, y + hologramOffset);
-    ctx.lineTo(canvas.width, y + hologramOffset);
+  function createParticles() {
+    const count = Math.floor((width * height) / 16000);
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 2 + 0.5,
+      });
+    }
   }
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.restore();
-}
 
-function drawLinesBetweenParticles() {
-  if (!ctx) return;
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "rgba(0, 255, 255, 0.8)";
 
-      if (distance < 150) {
-        const alpha = 0.2 * (1 - distance / 150);
-        ctx.strokeStyle = `rgba(0, 255, 255, ${alpha})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.stroke();
+    particles.forEach((p) => {
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // connect near particles
+    ctx.strokeStyle = "rgba(0,255,255,0.12)";
+    particles.forEach((p, i) => {
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x;
+        const dy = p.y - q.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.globalAlpha = 1 - dist / 120;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.stroke();
+        }
       }
-    }
+    });
+    ctx.globalAlpha = 1;
+
+    requestAnimationFrame(draw);
   }
+
+  window.addEventListener("resize", resize);
+  resize();
+  draw();
 }
 
-function animateParticles() {
-  if (!ctx || !canvas) return;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const theme = html.getAttribute("data-theme") || "dark";
-  if (theme === "dark") {
-    ctx.fillStyle = "rgba(2, 6, 23, 0.6)";
-  } else {
-    ctx.fillStyle = "rgba(241, 245, 249, 0.5)";
-  }
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  particles.forEach((particle) => {
-    particle.update();
-    particle.draw();
-  });
-
-  drawLinesBetweenParticles();
-  drawHologramLines();
-
-  // Animate hologram aura
-  auraAngle += 0.2;
-  const scale = 1 + Math.sin(auraAngle * (Math.PI / 180)) * 0.05;
-  hologramAura.style.transform = `translate(-50%, -50%) rotate(${auraAngle}deg) scale(${scale})`;
-  hologramAura.style.opacity =
-    0.18 + (Math.cos(auraAngle * (Math.PI / 180)) + 1) * 0.08;
-
-  requestAnimationFrame(animateParticles);
-}
-
-window.addEventListener("resize", () => {
-  if (!canvas) return;
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  initParticles();
-});
-
-// ========================
-// HOLOGRAM GLITCH ON HERO TITLE
-// ========================
-const heroTitle = document.querySelector(".hero-title");
-
-function triggerGlitch(element) {
-  if (!element) return;
-  element.style.transition = "none";
-
-  const originalTransform = element.style.transform;
-  const originalShadow = element.style.textShadow;
-  const originalLetterSpacing = element.style.letterSpacing;
-
-  const randomX = (Math.random() - 0.5) * 6;
-  const randomY = (Math.random() - 0.5) * 6;
-
-  element.style.transform = `translate(${randomX}px, ${randomY}px) skewX(2deg)`;
-  element.style.letterSpacing = "0.08em";
-  element.style.textShadow =
-    "0 0 6px rgba(0,255,255,0.8), -2px 0 4px rgba(255,0,255,0.8)";
-
-  setTimeout(() => {
-    element.style.transform = originalTransform;
-    element.style.textShadow = originalShadow;
-    element.style.letterSpacing = originalLetterSpacing;
-    element.style.transition = "all 0.15s ease-out";
-  }, 120);
-}
-
-if (heroTitle) {
-  setInterval(() => {
-    if (Math.random() > 0.6) {
-      triggerGlitch(heroTitle);
-    }
-  }, 3200);
-
-  heroTitle.addEventListener("mouseenter", () => triggerGlitch(heroTitle));
-}
-
-// ========================
-// PROJECTS DATA & FILTERING
-// ========================
-const projectsData = [
+// ==========================
+// PROJECTS, SKILLS, HIGHLIGHTS, BLOG DATA
+// ==========================
+const projects = [
   {
-    id: 1,
-    title: "Neural Canvas",
+    title: "Futuristic Portfolio",
     description:
-      "AI-powered creative platform that transforms text prompts into stunning digital artwork.",
+      "A high-performance, animated portfolio built with HTML, CSS and JavaScript, focused on futuristic UI and smooth user experience.",
+    tags: ["Frontend", "UI/UX", "Animation"],
     image:
-      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=500&fit=crop",
-    tags: ["React", "Python", "TensorFlow"],
-    category: "React",
+      "https://images.pexels.com/photos/313782/pexels-photo-313782.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    tech: "React",
   },
   {
-    id: 2,
-    title: "Quantum Dashboard",
+    title: "Virtual Zoo Management",
     description:
-      "Real-time analytics dashboard with 3D data visualization and millisecond precision.",
+      "OOP-based Java project for managing animals, enclosures, and staff in a virtual zoo environment.",
+    tags: ["Java", "OOP", "University"],
     image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
-    tags: ["TypeScript", "Three.js", "Node.js"],
-    category: "TypeScript",
+      "https://images.pexels.com/photos/88234/pexels-photo-88234.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    tech: "Python",
   },
   {
-    id: 3,
-    title: "Cyber Commerce",
+    title: "Interactive Math Visualizer",
     description:
-      "Next-generation e-commerce platform with AR previews and cryptocurrency payments.",
+      "Tool for visualizing functions, derivatives and areas using interactive graphs for learning calculus.",
+    tags: ["JavaScript", "Math", "Education"],
     image:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=500&fit=crop",
-    tags: ["Next.js", "Stripe", "PostgreSQL"],
-    category: "React",
-  },
-  {
-    id: 4,
-    title: "Synth Wave Radio",
-    description:
-      "Immersive music streaming platform with spatial audio and real-time visualizations.",
-    image:
-      "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=800&h=500&fit=crop",
-    tags: ["React Native", "Web Audio API"],
-    category: "React",
-  },
-  {
-    id: 5,
-    title: "Code Forge",
-    description:
-      "Collaborative code editor with real-time pair programming and AI code completion.",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=500&fit=crop",
-    tags: ["React", "TypeScript", "WebSocket"],
-    category: "TypeScript",
-  },
-  {
-    id: 6,
-    title: "Stellar Maps",
-    description:
-      "Interactive 3D space exploration app with real-time astronomical data.",
-    image:
-      "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=500&fit=crop",
-    tags: ["Three.js", "WebGL", "Python"],
-    category: "Python",
+      "https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    tech: "TypeScript",
   },
 ];
 
+const skills = [
+  { name: "HTML / CSS / Tailwind", level: 85 },
+  { name: "JavaScript (ES6+)", level: 80 },
+  { name: "React / Next.js (learning)", level: 70 },
+  { name: "Java / OOP", level: 75 },
+  { name: "Problem Solving & DSA", level: 65 },
+];
+
+const highlights = [
+  {
+    icon: "⚡",
+    title: "Performance-Focused",
+    text: "I care about fast load times, clean structure and efficient code so your site feels snappy.",
+  },
+  {
+    icon: "🎨",
+    title: "Futuristic UI",
+    text: "I love building bold, modern, neon-style interfaces that stand out and feel unique.",
+  },
+  {
+    icon: "🧠",
+    title: "Continuous Learner",
+    text: "Always improving my skills in React, TypeScript, algorithms and backend concepts.",
+  },
+  {
+    icon: "🤝",
+    title: "Easy to Work With",
+    text: "Clear communication, quick iteration and open to feedback at every step.",
+  },
+];
+
+const blogPosts = [
+  {
+    title: "My Journey into Web Development",
+    category: "Story",
+    date: "Feb 2025",
+    readTime: "5 min read",
+    excerpt:
+      "How I started with basic HTML, got curious about design, and slowly moved into JavaScript and real projects.",
+    image:
+      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+  {
+    title: "Balancing University & Coding",
+    category: "Productivity",
+    date: "Mar 2025",
+    readTime: "4 min read",
+    excerpt:
+      "Some strategies I use to manage CSE coursework while still building personal projects on the side.",
+    image:
+      "https://images.pexels.com/photos/374820/pexels-photo-374820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+  {
+    title: "Why I Love Futuristic Design",
+    category: "Design",
+    date: "Apr 2025",
+    readTime: "3 min read",
+    excerpt:
+      "A short breakdown of why neon, glassmorphism and sci-fi inspired UI really motivate me to design.",
+    image:
+      "https://images.pexels.com/photos/7915358/pexels-photo-7915358.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+];
+
+// ==========================
+// POPULATE UI SECTIONS
+// ==========================
 function renderProjects(filter = "all") {
-  const projectsGrid = document.getElementById("projectsGrid");
-  if (!projectsGrid) return;
+  const grid = document.getElementById("projectsGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
 
-  projectsGrid.innerHTML = "";
+  projects.forEach((project, index) => {
+    if (filter !== "all" && project.tech !== filter) return;
 
-  const filtered =
-    filter === "all"
-      ? projectsData
-      : projectsData.filter((p) => p.category === filter);
-
-  filtered.forEach((project, index) => {
     const card = document.createElement("div");
-    card.className = "project-card";
-    card.style.opacity = "0";
-    card.style.transform = "translateY(20px)";
+    card.className = "project-card show";
+    card.style.animationDelay = index * 0.07 + "s";
+
     card.innerHTML = `
-      <img src="${project.image}" alt="${project.title}" class="project-image">
+      <img src="${project.image}" alt="${
+      project.title
+    }" class="project-image" />
       <div class="project-content">
         <h3 class="project-title">${project.title}</h3>
         <p class="project-description">${project.description}</p>
         <div class="project-tags">
-          ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          ${project.tags
+            .map((tag) => `<span class="tag">${tag}</span>`)
+            .join("")}
         </div>
       </div>
     `;
 
-    projectsGrid.appendChild(card);
-
-    setTimeout(() => {
-      card.classList.add("show");
-      card.style.opacity = "1";
-      card.style.transform = "translateY(0)";
-    }, 100 * index);
-
-    // Hologram tilt effect
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const rotateY = (x / rect.width - 0.5) * 10;
-      const rotateX = (y / rect.height - 0.5) * -10;
-      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
-    });
-    card.addEventListener("mouseleave", () => {
-      card.style.transform =
-        "perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)";
-    });
+    grid.appendChild(card);
   });
 }
 
-const filterButtons = document.querySelectorAll(".filter-btn");
-filterButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    filterButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    renderProjects(btn.dataset.filter);
-  });
-});
-
-// ========================
-// SKILLS ANIMATION
-// ========================
-const skillsData = [
-  { name: "React / Next.js", level: 95 },
-  { name: "TypeScript", level: 90 },
-  { name: "Node.js", level: 88 },
-  { name: "Python", level: 82 },
-  { name: "Three.js / WebGL", level: 78 },
-  { name: "UI/UX Design", level: 85 },
-];
-
 function renderSkills() {
-  const skillsList = document.getElementById("skillsList");
-  if (!skillsList) return;
+  const list = document.getElementById("skillsList");
+  if (!list) return;
+  list.innerHTML = "";
 
-  skillsList.innerHTML = "";
+  skills.forEach((skill, index) => {
+    const item = document.createElement("div");
+    item.className = "skill-item";
+    item.style.animationDelay = index * 0.08 + "s";
 
-  skillsData.forEach((skill, index) => {
-    const skillDiv = document.createElement("div");
-    skillDiv.className = "skill-item";
-    skillDiv.style.animationDelay = `${0.1 * index}s`;
-    skillDiv.style.opacity = "0";
-    skillDiv.style.transform = "translateY(20px)";
-    skillDiv.innerHTML = `
+    item.innerHTML = `
       <div class="skill-name">
         <span>${skill.name}</span>
         <span>${skill.level}%</span>
       </div>
       <div class="skill-bar">
-        <div class="skill-progress" style="width: 0%"></div>
+        <div class="skill-progress" data-level="${skill.level}"></div>
       </div>
     `;
-
-    skillsList.appendChild(skillDiv);
+    list.appendChild(item);
   });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const bars = document.querySelectorAll(".skill-progress");
-        bars.forEach((bar, index) => {
-          setTimeout(() => {
-            bar.style.width = skillsData[index].level + "%";
-          }, 100 * index);
-        });
-
-        const items = document.querySelectorAll(".skill-item");
-        items.forEach((item) => {
-          item.style.opacity = "1";
-          item.style.transform = "translateY(0)";
-        });
-
-        observer.unobserve(entry.target);
-      }
-    });
-  });
-
-  observer.observe(skillsList);
 }
-
-// ========================
-// HIGHLIGHTS
-// ========================
-const highlightsData = [
-  { title: "Clean Code", description: "Writing maintainable, scalable code" },
-  { title: "Creative Design", description: "Crafting beautiful interfaces" },
-  { title: "Performance", description: "Optimizing for speed and efficiency" },
-  { title: "Collaboration", description: "Working effectively with teams" },
-];
 
 function renderHighlights() {
-  const highlightsGrid = document.getElementById("highlightsGrid");
-  if (!highlightsGrid) return;
+  const grid = document.getElementById("highlightsGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
 
-  highlightsGrid.innerHTML = "";
-
-  highlightsData.forEach((highlight, index) => {
+  highlights.forEach((h, index) => {
     const card = document.createElement("div");
     card.className = "highlight-card";
-    card.style.animationDelay = `${0.1 * index}s`;
-    card.style.opacity = "0";
-    card.style.transform = "translateY(20px)";
+    card.style.animationDelay = index * 0.09 + "s";
+
     card.innerHTML = `
-      <div class="highlight-icon">${["💻", "🎨", "⚡", "🤝"][index]}</div>
-      <h4>${highlight.title}</h4>
-      <p>${highlight.description}</p>
+      <div class="highlight-icon">${h.icon}</div>
+      <h4>${h.title}</h4>
+      <p>${h.text}</p>
     `;
 
-    highlightsGrid.appendChild(card);
-
-    setTimeout(() => {
-      card.style.opacity = "1";
-      card.style.transform = "translateY(0)";
-    }, 150 * index);
+    grid.appendChild(card);
   });
 }
 
-// ========================
-// BLOG DATA & RENDERING
-// ========================
-const blogData = [
-  {
-    id: 1,
-    title: "Building Futuristic UIs with Glass Morphism",
-    excerpt:
-      "Explore the techniques behind creating stunning glass morphism effects.",
-    image:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=500&fit=crop",
-    category: "Design",
-    date: "Nov 25, 2024",
-    readTime: "5 min",
-  },
-  {
-    id: 2,
-    title: "The Power of Framer Motion in React",
-    excerpt: "Learn how to create smooth animations using Framer Motion.",
-    image:
-      "https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=800&h=500&fit=crop",
-    category: "Development",
-    date: "Nov 20, 2024",
-    readTime: "8 min",
-  },
-  {
-    id: 3,
-    title: "Optimizing Web Performance in 2024",
-    excerpt: "A comprehensive guide to making your websites lightning fast.",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop",
-    category: "Performance",
-    date: "Nov 15, 2024",
-    readTime: "10 min",
-  },
-];
-
 function renderBlog() {
-  const blogGrid = document.getElementById("blogGrid");
-  if (!blogGrid) return;
+  const grid = document.getElementById("blogGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
 
-  blogGrid.innerHTML = "";
-
-  blogData.forEach((post, index) => {
+  blogPosts.forEach((post, index) => {
     const card = document.createElement("div");
-    card.className = "blog-card";
-    card.style.opacity = "0";
-    card.style.transform = "translateY(20px)";
+    card.className = "blog-card show";
+    card.style.animationDelay = index * 0.07 + "s";
+
     card.innerHTML = `
-      <img src="${post.image}" alt="${post.title}" class="blog-image">
+      <img src="${post.image}" alt="${post.title}" class="blog-image" />
       <div class="blog-content">
         <span class="blog-category">${post.category}</span>
         <h3 class="blog-title">${post.title}</h3>
         <div class="blog-meta">
-          <span>📅 ${post.date}</span>
-          <span>⏱️ ${post.readTime} read</span>
+          <span>${post.date}</span>
+          <span>${post.readTime}</span>
         </div>
         <p class="blog-excerpt">${post.excerpt}</p>
       </div>
     `;
 
-    blogGrid.appendChild(card);
-
-    setTimeout(() => {
-      card.classList.add("show");
-      card.style.opacity = "1";
-      card.style.transform = "translateY(0)";
-    }, 120 * index);
+    grid.appendChild(card);
   });
 }
 
-// ========================
-// CONTACT FORM
-// ========================
-const contactForm = document.getElementById("contactForm");
+// ==========================
+// THEME TOGGLE
+// ==========================
+function initThemeToggle() {
+  const html = document.documentElement;
+  const toggle = document.getElementById("themeToggle");
+  if (!toggle) return;
 
-if (contactForm) {
-  contactForm.addEventListener("submit", async (e) => {
+  const saved = localStorage.getItem("mujahid-theme");
+  if (saved === "light" || saved === "dark") {
+    html.setAttribute("data-theme", saved);
+  }
+
+  toggle.addEventListener("click", () => {
+    const current = html.getAttribute("data-theme") || "dark";
+    const next = current === "dark" ? "light" : "dark";
+    html.setAttribute("data-theme", next);
+    localStorage.setItem("mujahid-theme", next);
+  });
+}
+
+// ==========================
+// NAV TOGGLE & SCROLL EFFECTS
+// ==========================
+function initNav() {
+  const navToggle = document.getElementById("navToggle");
+  const navMenu = document.getElementById("navMenu");
+  const navbar = document.querySelector(".navbar");
+  const scrollBar = document.getElementById("scrollProgress");
+
+  if (navToggle && navMenu) {
+    navToggle.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+    });
+
+    navMenu.querySelectorAll(".nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("active");
+      });
+    });
+  }
+
+  window.addEventListener("scroll", () => {
+    const scrolled = window.scrollY;
+    if (navbar) {
+      if (scrolled > 50) navbar.classList.add("scrolled");
+      else navbar.classList.remove("scrolled");
+    }
+
+    if (scrollBar) {
+      const docHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const progress = docHeight > 0 ? (scrolled / docHeight) * 100 : 0;
+      scrollBar.style.width = progress + "%";
+    }
+  });
+}
+
+// ==========================
+// SKILL BAR ANIMATION
+// ==========================
+function initSkillObserver() {
+  const skillSection = document.getElementById("about");
+  if (!skillSection) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll(".skill-progress").forEach((bar) => {
+            const level = bar.getAttribute("data-level");
+            bar.style.width = level + "%";
+          });
+          observer.disconnect();
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  observer.observe(skillSection);
+}
+
+// ==========================
+// CONTACT FORM
+// ==========================
+function initContactForm() {
+  const form = document.getElementById("contactForm");
+  if (!form) return;
+
+  const nameEl = document.getElementById("formName");
+  const emailEl = document.getElementById("formEmail");
+  const msgEl = document.getElementById("formMessage");
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("formName").value.trim();
-    const email = document.getElementById("formEmail").value.trim();
-    const message = document.getElementById("formMessage").value.trim();
+    const name = nameEl.value.trim();
+    const email = emailEl.value.trim();
+    const message = msgEl.value.trim();
 
     if (!name || !email || !message) {
       alert("Please fill all the fields.");
       return;
     }
 
-    const btn = contactForm.querySelector("button");
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = "Sending...";
+    form.querySelector("button[type='submit']").disabled = true;
+    form.querySelector("button[type='submit']").textContent = "Sending...";
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/contact`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, message }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject: "", message }),
       });
 
-      let data = null;
-      try {
-        data = await res.json();
-      } catch (jsonErr) {
-        console.error("JSON parse error:", jsonErr);
-        alert("Server did not return valid JSON.");
-        btn.textContent = "Server Error";
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.textContent = originalText;
-        }, 2500);
-        return;
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to send message");
       }
 
-      console.log("Backend response:", data);
-
-      if (res.ok && data && data.success) {
-        btn.textContent = "✓ Message Sent!";
-        contactForm.reset();
-      } else {
-        console.error("Backend error:", data);
-        btn.textContent = "Error, Try Again";
-      }
+      alert("✅ Message sent successfully!");
+      form.reset();
     } catch (err) {
-      console.error("Network error:", err);
-      btn.textContent = "Network Error";
+      console.error(err);
+      alert("❌ Failed to send message. Please try again later.");
+    } finally {
+      form.querySelector("button[type='submit']").disabled = false;
+      form.querySelector("button[type='submit']").textContent = "Send Message";
     }
-
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.textContent = originalText;
-    }, 2500);
   });
 }
 
-// ========================
-// SMOOTH SCROLL
-// ========================
-function scrollToSection(selector) {
-  const element = document.querySelector(selector);
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" });
-  }
-}
+// ==========================
+// INIT EVERYTHING
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+  initParticles();
+  initThemeToggle();
+  initNav();
+  renderProjects();
+  renderSkills();
+  renderHighlights();
+  renderBlog();
+  initSkillObserver();
+  initContactForm();
 
-// ========================
-// INTERSECTION OBSERVER FOR EXTRA FADE-IN
-// ========================
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: "0px 0px -100px 0px",
-};
-
-const fadeObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = "1";
-      entry.target.style.transform = "translateY(0)";
-      fadeObserver.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
-
-function attachFadeObserver() {
-  document
-    .querySelectorAll(
-      ".project-card, .blog-card, .highlight-card, .skill-item, .edu-card"
-    )
-    .forEach((el) => {
-      fadeObserver.observe(el);
+  // Project filter buttons
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".filter-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.getAttribute("data-filter");
+      renderProjects(filter);
     });
-}
+  });
+});
+// ========================
+// SECTION REVEAL + ACTIVE NAV
+// ========================
+function initSectionRevealAndNav() {
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-link");
 
-// ========================
-// INITIALIZE
-// ========================
+  // add base reveal class
+  sections.forEach((sec) => sec.classList.add("section-reveal"));
+
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.getAttribute("id");
+
+        if (entry.isIntersecting) {
+          // reveal animation
+          entry.target.classList.add("visible");
+
+          // update active nav link
+          navLinks.forEach((link) => {
+            if (link.getAttribute("href") === `#${id}`) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active");
+            }
+          });
+        }
+      });
+    },
+    {
+      threshold: 0.35,
+      rootMargin: "0px 0px -20% 0px",
+    }
+  );
+
+  sections.forEach((sec) => sectionObserver.observe(sec));
+}
 initTheme();
 initParticles();
 animateParticles();
@@ -711,3 +497,54 @@ renderSkills();
 renderHighlights();
 renderBlog();
 attachFadeObserver();
+initSectionRevealAndNav(); // 👈 add this
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("siuu-overlay");
+  const video = document.getElementById("siuu-video");
+  const audio = document.getElementById("siuu-audio");
+  const playBtn = document.getElementById("siuu-play-btn");
+  const skipBtn = document.getElementById("siuu-skip-btn");
+
+  overlay.classList.remove("hidden");
+
+  // Start video muted so Chrome ALLOWS autoplay
+  video.muted = true;
+
+  video.play().catch(() => {
+    console.warn("Video autoplay blocked");
+  });
+
+  // The magic fix: unmute and play sound on FIRST user action
+  const enableSound = async () => {
+    video.muted = false;
+    audio.currentTime = 0;
+
+    try {
+      await audio.play();
+    } catch (e) {
+      console.warn("Still blocked:", e);
+    }
+
+    // Remove listener after sound plays once
+    window.removeEventListener("click", enableSound);
+    window.removeEventListener("scroll", enableSound);
+    window.removeEventListener("keydown", enableSound);
+  };
+
+  // ANY user action will activate sound (best Chrome fix)
+  window.addEventListener("click", enableSound, { once: true });
+  window.addEventListener("scroll", enableSound, { once: true });
+  window.addEventListener("keydown", enableSound, { once: true });
+
+  // Skip button
+  skipBtn.addEventListener("click", () => {
+    audio.pause();
+    video.pause();
+    overlay.classList.add("hidden");
+  });
+
+  // Auto close when video ends
+  video.addEventListener("ended", () => {
+    overlay.classList.add("hidden");
+  });
+});
