@@ -5,7 +5,7 @@
 // Example: const BACKEND_URL = "https://portfolio-backend-yourname.up.railway.app";
 // ❌ NO trailing slash here
 const BACKEND_URL =
-  "https://portfolio-backend-r1qgdkkjn-mujahid137s-projects.vercel.app";
+  "https://portfolio-backend-vercel-c178djp00-mujahid137s-projects.vercel.app";
 
 
 // ========================
