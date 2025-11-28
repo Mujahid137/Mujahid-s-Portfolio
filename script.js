@@ -3,7 +3,7 @@
 // ========================
 // Change this to your deployed backend URL (Railway / Render):
 // Example: const BACKEND_URL = "https://portfolio-backend-yourname.up.railway.app";
-const BACKEND_URL = "https://your-backend-url-here.com";
+const BACKEND_URL = "https://portfolio-backend-1tv6a22so-mujahid137s-projects.vercel.app/";
 
 
 // ========================
