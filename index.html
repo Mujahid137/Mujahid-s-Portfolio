@@ -5,16 +5,49 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mujahid - Creative Developer</title>
-    <meta
-      name="description"
-      content="Futuristic portfolio showcasing innovative web projects by Mujahid."
-    />
+    ...
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
+  <!-- SIUU OVERLAY -->
+  <div id="siuu-overlay" class="siuu-overlay hidden">
+    <div class="siuu-overlay-backdrop"></div>
+
+    <div class="siuu-overlay-content">
+      <div class="siuu-3d-frame">
+        <!-- 3D-style animation (video or lottie/canvas later) -->
+        <video
+          id="siuu-video"
+          class="siuu-video"
+          src="assets/siuu-animation.mp4.mp4"
+          playsinline
+        ></video>
+      </div>
+
+      <div class="siuu-text">
+        <h2>SIUUU! ⚡</h2>
+        <p>Welcome to my portfolio. Enjoy the celebration!</p>
+        <button id="siuu-play-btn" class="button siuu-play-btn">
+          ▶ Play Siuu
+        </button>
+        <button id="siuu-skip-btn" class="ghost-button siuu-skip-btn">
+          Skip
+        </button>
+      </div>
+    </div>
+
+    <audio id="siuu-audio" src="assets/siuu-audio.mp3.mp3"></audio>
+  </div>
+
   <body>
     <!-- Navigation -->
     <nav class="navbar">
@@ -33,9 +66,9 @@
           <li><a href="#blog" class="nav-link">Blog</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
-        <button class="theme-toggle" id="themeToggle">
-          <span class="sun-icon">☀️</span>
-          <span class="moon-icon">🌙</span>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <i class="fa-solid fa-sun theme-icon theme-icon--sun"></i>
+          <i class="fa-solid fa-moon theme-icon theme-icon--moon"></i>
         </button>
       </div>
     </nav>
@@ -62,7 +95,6 @@
               I design and develop immersive, high-performance web experiences
               with a blend of clean engineering and bold visuals.
             </p>
-
             <div class="dp-wrapper">
               <div class="dp-inner"></div>
             </div>
@@ -112,10 +144,11 @@
               <!-- change this src to your DP path -->
               <div class="hero-dp-frame">
                 <img
-                  src="mujahid-dp.png"
-                  alt="Abdullah Al Mujahid"
+                  src="assets/mujahid-dp.png.jpg"
+                  alt="Abudllah Al Mujahid"
                   class="hero-dp"
                 />
+
                 <span class="hero-dp-status">ONLINE</span>
               </div>
 
@@ -142,6 +175,73 @@
                 <div class="hero-dp-stat">
                   <span class="hero-dp-stat-number">∞</span>
                   <span class="hero-dp-stat-label">Ideas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Personal DP Spotlight Section -->
+    <section id="profile" class="profile">
+      <div class="container">
+        <div class="profile-grid">
+          <!-- LEFT: Text / Description -->
+          <div class="profile-text">
+            <p class="profile-kicker">Beyond the Code</p>
+            <h2 class="profile-title">
+              The <span class="gradient-text">Person</span> Behind the Pixels
+            </h2>
+            <p class="profile-subtitle">
+              I’m Abdullah Al Mujahid, a developer who loves turning abstract
+              ideas into smooth, interactive experiences. When I’m not tweaking
+              UI details, I’m exploring new tools, learning, and crafting better
+              ways to solve problems.
+            </p>
+
+            <div class="profile-tags">
+              <span class="profile-chip">UI/UX Enthusiast</span>
+              <span class="profile-chip">Clean Code Lover</span>
+              <span class="profile-chip">Problem Solver</span>
+              <span class="profile-chip">CSE @ UIU</span>
+            </div>
+
+            <div class="profile-meta">
+              <div class="profile-meta-item">
+                <span class="profile-meta-label">Current Focus</span>
+                <span class="profile-meta-value">Frontend · React · UX</span>
+              </div>
+              <div class="profile-meta-item">
+                <span class="profile-meta-label">Energy Level</span>
+                <span class="profile-meta-value">☕ x 3 · Always On</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Futuristic DP Card -->
+          <div class="profile-dp-shell">
+            <div class="profile-orbit profile-orbit--outer"></div>
+            <div class="profile-orbit profile-orbit--inner"></div>
+
+            <div class="profile-dp-card">
+              <div class="profile-dp-glow"></div>
+              <div class="profile-dp-scan"></div>
+
+              <div class="profile-dp-frame">
+                <img
+                  src="assets/mujahid-dp-2.jpg.jpg"
+                  alt="Abdullah Al Mujahid portrait"
+                  class="profile-dp"
+                />
+              </div>
+
+              <div class="profile-dp-footer">
+                <div class="profile-status-pill">
+                  <span class="status-dot"></span>
+                  <span>Available for Collabs</span>
+                </div>
+                <div class="profile-mini-metrics">
+                  <span>Design · Dev · Deploy</span>
                 </div>
               </div>
             </div>
@@ -223,11 +323,11 @@
           </div>
 
           <div class="edu-card">
-            <h3>Notre Dame College, Dhaka</h3>
+            <h3>Notre Dame College,Dhaka</h3>
             <p class="edu-degree">
               Higher Secondary Certificate (HSC) · Science
             </p>
-            <p class="edu-meta">2020 – 2022</p>
+            <p class="edu-meta">2020-2022</p>
             <p class="edu-extra">
               Focus on Mathematics, Physics, Chemistry, and ICT with strong
               interest in problem solving and logical reasoning.
@@ -350,4 +450,82 @@
 
     <script src="script.js"></script>
   </body>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const overlay = document.getElementById("siuu-overlay");
+      const video = document.getElementById("siuu-video");
+      const audio = document.getElementById("siuu-audio");
+      const playBtn = document.getElementById("siuu-play-btn");
+      const skipBtn = document.getElementById("siuu-skip-btn");
+
+      // So it only shows once per tab/session
+
+      // Show overlay
+      overlay.classList.remove("hidden");
+
+      // Try autoplay (muted at first, then unmute audio)
+      const tryAutoplay = async () => {
+        try {
+          // Start video muted to satisfy some policies
+          video.muted = true;
+          await video.play();
+
+          // Try play audio (may fail if no interaction)
+          try {
+            await audio.play();
+            video.muted = false;
+          } catch (e) {
+            console.warn(
+              "Autoplay with sound blocked. Waiting for user gesture."
+            );
+            // Show play button if sound was blocked
+            playBtn.style.display = "inline-flex";
+          }
+        } catch (err) {
+          console.warn("Video autoplay blocked:", err);
+          playBtn.style.display = "inline-flex";
+        }
+      };
+
+      // Initially hide play button until we know we need it
+      playBtn.style.display = "none";
+
+      tryAutoplay();
+
+      // User manually clicks "Play Siuu"
+      playBtn.addEventListener("click", async () => {
+        try {
+          video.currentTime = 0;
+          audio.currentTime = 0;
+          video.muted = false;
+          await video.play();
+          await audio.play();
+          playBtn.style.display = "none";
+        } catch (err) {
+          console.error("Error playing Siuu:", err);
+        }
+      });
+
+      const closeOverlay = () => {
+        overlay.classList.add("fade-out");
+        setTimeout(() => {
+          overlay.classList.add("hidden");
+          overlay.classList.remove("fade-out");
+        }, 380);
+      };
+
+      // Skip button closes overlay
+      skipBtn.addEventListener("click", () => {
+        audio.pause();
+        video.pause();
+        closeOverlay();
+      });
+
+      // Optional: close when video ends
+      video.addEventListener("ended", () => {
+        closeOverlay();
+      });
+    });
+  </script>
 </html>
