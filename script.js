@@ -278,7 +278,7 @@ function triggerGlitch(element) {
   element.style.transform = `translate(${randomX}px, ${randomY}px) skewX(2deg)`;
   element.style.letterSpacing = "0.08em";
   element.style.textShadow =
-    "0 0 6px rgba(0,255,255,0.8), -2px 0 4px rgba(255,0,255,0.8)`;
+    "0 0 6px rgba(0,255,255,0.8), -2px 0 4px rgba(255,0,255,0.8)";
 
   setTimeout(() => {
     element.style.transform = originalTransform;
