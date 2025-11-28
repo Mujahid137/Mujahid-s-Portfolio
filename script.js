@@ -181,7 +181,7 @@ const blogPosts = [
     excerpt:
       "A short breakdown of why neon, glassmorphism and sci-fi inspired UI really motivate me to design.",
     image:
-      "https://images.pexels.com/photos/7915358/pexels-photo-7915358.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.wallpapersden.com/image/download/cyberpunk-hd-neon-city_bW5lbG2UmZqaraWkpJRmbmdlrWZrZWU.jpg",
   },
 ];
 
