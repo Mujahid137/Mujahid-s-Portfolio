@@ -1,18 +1,11 @@
 // ========================
 // BACKEND CONFIG
 // ========================
-// Change this to your deployed backend URL (Railway / Render):
+// Change this to your deployed backend URL (Railway / Render / Vercel):
 // Example: const BACKEND_URL = "https://portfolio-backend-yourname.up.railway.app";
 // ❌ NO trailing slash here
-const BACKEND_URL = "https://portfolio-backend-r1qgdkkjn-mujahid137s-projects.vercel.app";
-
-// ✅ Now this becomes: https://...vercel.app/api/contact
-fetch(`${BACKEND_URL}/api/contact`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ name, email, message }),
-});
-
+const BACKEND_URL =
+  "https://portfolio-backend-r1qgdkkjn-mujahid137s-projects.vercel.app";
 
 
 // ========================
@@ -285,7 +278,7 @@ function triggerGlitch(element) {
   element.style.transform = `translate(${randomX}px, ${randomY}px) skewX(2deg)`;
   element.style.letterSpacing = "0.08em";
   element.style.textShadow =
-    "0 0 6px rgba(0,255,255,0.8), -2px 0 4px rgba(255,0,255,0.8)";
+    "0 0 6px rgba(0,255,255,0.8), -2px 0 4px rgba(255,0,255,0.8)`;
 
   setTimeout(() => {
     element.style.transform = originalTransform;
@@ -393,9 +386,7 @@ function renderProjects(filter = "all") {
         <h3 class="project-title">${project.title}</h3>
         <p class="project-description">${project.description}</p>
         <div class="project-tags">
-          ${project.tags
-            .map((tag) => `<span class="tag">${tag}</span>`)
-            .join("")}
+          ${project.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
         </div>
       </div>
     `;
