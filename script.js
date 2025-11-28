@@ -1,4 +1,11 @@
-// script.js
+// ========================
+// BACKEND CONFIG
+// ========================
+// Change this to your deployed backend URL (Railway / Render):
+// Example: const BACKEND_URL = "https://portfolio-backend-yourname.up.railway.app";
+const BACKEND_URL = "https://your-backend-url-here.com";
+
+
 // ========================
 // THEME MANAGEMENT
 // ========================
@@ -599,6 +606,11 @@ if (contactForm) {
     const email = document.getElementById("formEmail").value.trim();
     const message = document.getElementById("formMessage").value.trim();
 
+    if (!name || !email || !message) {
+      alert("Please fill all the fields.");
+      return;
+    }
+
     const btn = contactForm.querySelector("button");
     const originalText = btn.textContent;
 
@@ -606,16 +618,13 @@ if (contactForm) {
     btn.textContent = "Sending...";
 
     try {
-      const res = await fetch(
-        "https://portfolio-backend-kb57.onrender.com/api/contact",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email, message }),
-        }
-      );
+      const res = await fetch(`${BACKEND_URL}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, message }),
+      });
 
       let data = null;
       try {
@@ -633,8 +642,7 @@ if (contactForm) {
 
       console.log("Backend response:", data);
 
-      // 🔥 For now: treat any 2xx as success (demo mode)
-      if (res.ok) {
+      if (res.ok && data && data.success) {
         btn.textContent = "✓ Message Sent!";
         contactForm.reset();
       } else {
@@ -652,7 +660,6 @@ if (contactForm) {
     }, 2500);
   });
 }
-
 
 // ========================
 // SMOOTH SCROLL
